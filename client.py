@@ -25,12 +25,10 @@ def recv_handler(msg, conn):
     command = args.pop(0).upper()
     if command == "PRINT":
         print(' '.join(args))
+        send("RECIVED", conn)
     elif command == "QUESTION":
         answer = input(' '.join(args) + ':\n')
         send(answer, conn)
-    elif command == "ANSWER":
-        print(' '.join(args))
-        send("RECEIVED", conn)
     else:
         return msg
 
