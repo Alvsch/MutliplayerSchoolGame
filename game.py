@@ -4,7 +4,6 @@ class Game:
         self.ready = False
         self.p1Went = False
         self.p2Went = False
-        self.sentAnswer = False
         self.winner = -1
         self.wins = [0, 0]
         self.answers = [0, 0]

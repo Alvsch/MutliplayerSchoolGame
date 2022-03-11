@@ -1,8 +1,6 @@
-from email import message
 import socket
 import threading
 
-from flask import g
 from game import Game
 
 HEADER = 10
@@ -44,26 +42,26 @@ def handle_client(conn, addr, p, gameId):
     print(f"[NEW CONNECTION] {addr} connected.")
 
     while True:
-        if games[gameId].p1Went and games[gameId].p2Went:
-            if games[gameId].winner == p:
-                send("ANSWER You Won")
-            else:
-                send("ANSWER You Lost")
+        if games[gameId].ready:
+            if games[gameId].p1Went and games[gameId].p2Went:
+                if games[gameId].winner == p:
+                    send("PRINT You Won", conn)
+                else:
+                    send("PRINT You Lost", conn)
 
-            games[gameId].p1Went = False
-            games[gameId].p2Went = False
-        else:
-            if games[gameId].sentAnswer == False:
+                games[gameId].p1Went = False
+                games[gameId].p2Went = False
+            else:
                 question = get_math_question()
                 answer = send(f"QUESTION {question[0]}", conn)
                 if p == 0:
-                    games[gameId].answers = [answer, games[gameId.answers[1]]]
+                    games[gameId].answers = [answer, games[gameId].answers[1]]
                     games[gameId].p1Went = True
                     if games[gameId].answers[0] == question[1]:
                         if games[gameId].winner != -1:
                             games[gameId].winner = 0
                 else:
-                    games[gameId].answers = [games[gameId.answers[0]], answer]
+                    games[gameId].answers = [games[gameId].answers[0], answer]
                     games[gameId].p2Went = True
                     if games[gameId].answers[1] == question[1]:
                         if games[gameId].winner != -1:
@@ -71,6 +69,7 @@ def handle_client(conn, addr, p, gameId):
 
 
 def start():
+    global idCount
     server.listen()
     print(f"[LISTENING] Server is listening on {IP}")
     while True:

@@ -2,7 +2,7 @@ import socket
 
 
 HEADER = 10
-IP = "192.168.0.0" #Change to server host IP address
+IP = "192.168.86.222" #Change to server host IP address
 PORT = 5555 #Change to same as server.py
 ADDR = (IP, PORT)
 FORMAT = 'utf-8'
